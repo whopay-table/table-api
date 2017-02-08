@@ -78,6 +78,9 @@ GEM
       mini_portile2 (~> 2.1.0)
     puma (3.6.2)
     rack (2.0.1)
+    rack-attack (5.0.1)
+      rack
+    rack-cors (0.4.1)
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (5.0.1)
@@ -153,6 +156,8 @@ DEPENDENCIES
   byebug
   listen (~> 3.0.5)
   puma (~> 3.0)
+  rack-attack
+  rack-cors
   rails (~> 5.0.1)
   rspec-rails (>= 3.5.0)
   spring
@@ -161,4 +166,4 @@ DEPENDENCIES
   tzinfo-data
 
 BUNDLED WITH
-   1.13.7
+   1.14.3
