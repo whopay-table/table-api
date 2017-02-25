@@ -1,5 +1,6 @@
 class GroupsController < ApplicationController
   before_action :set_group, only: [:show, :update, :destroy]
+  skip_before_action :authenticate, :only => [:create]
 
   # GET /groups
   def index
@@ -46,6 +47,6 @@ class GroupsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def group_params
-      params.require(:group).permit(:groupname, :title, :password_hash, :salt)
+      params.require(:group).permit(:groupname, :title, :password, :password_confirmation)
     end
 end
