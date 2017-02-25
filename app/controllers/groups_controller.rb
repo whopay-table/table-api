@@ -19,7 +19,14 @@ class GroupsController < ApplicationController
     @group = Group.new(group_params)
 
     if @group.save
-      render json: @group, status: :created, location: @group
+      @user = User.new({ :group_id => @group.id }.merge(user_params))
+
+      if @user.save
+        render json: @group, status: :created, location: @group
+      else
+        @group.destroy
+        render json: @user.errors, status: :unprocessable_entity
+      end
     else
       render json: @group.errors, status: :unprocessable_entity
     end
@@ -48,5 +55,11 @@ class GroupsController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def group_params
       params.require(:group).permit(:groupname, :title, :password, :password_confirmation)
+    end
+
+    def user_params
+      params.require(:user).permit(
+        :email, :username, :name, :account_info, :balance,
+        :is_admin, :password, :password_confirmation, :string)
     end
 end
