@@ -5,11 +5,11 @@ class User < ApplicationRecord
   before_save :default_values
 
   validates_confirmation_of :password
-  validates_presence_of :password, :on => :create
+  validates_presence_of :password, on: :create
   validates_presence_of :email
-  validates_uniqueness_of :email, :scope => :group_id
+  validates_uniqueness_of :email, scope: :group_id
   validates_presence_of :username
-  validates_uniqueness_of :username, :scope => :group_id
+  validates_uniqueness_of :username, scope: :group_id
   validates_presence_of :name
 
   def self.authenticate(email, password)
@@ -30,8 +30,11 @@ class User < ApplicationRecord
 
   def default_values
     self.balance = 0
-    self.is_admin = false
     self.api_key = generate_api_key
+
+    unless is_admin.present?
+      self.is_admin = false
+    end
   end
 
   # # Assign an API key on create

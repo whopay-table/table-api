@@ -19,7 +19,10 @@ class GroupsController < ApplicationController
     @group = Group.new(group_params)
 
     if @group.save
-      @user = User.new({ :group_id => @group.id }.merge(user_params))
+      @user = User.new({
+        group_id: @group.id,
+        is_admin: true
+      }.merge(user_params))
 
       if @user.save
         render json: @group, status: :created, location: @group
@@ -34,10 +37,14 @@ class GroupsController < ApplicationController
 
   # PATCH/PUT /groups/1
   def update
-    if @group.update(group_params)
-      render json: @group
+    if @current_user.group_id == group_params[:id] && @current_user.is_admin
+      if @group.update(group_params)
+        render json: @group
+      else
+        render json: @group.errors, status: :unprocessable_entity
+      end
     else
-      render json: @group.errors, status: :unprocessable_entity
+      render_forbidden
     end
   end
 

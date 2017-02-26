@@ -23,4 +23,10 @@ class ApplicationController < ActionController::API
       :errors => [ { :code => "auth_fail", :message => "Authentication fail" } ]
     }, status: :unauthorized
   end
+
+  def render_forbidden
+    render json: {
+      :errors => [ { :code => "forbidden", :message => "No access permission" } ]
+    }, status: :forbidden
+  end
 end
