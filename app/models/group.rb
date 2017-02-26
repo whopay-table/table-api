@@ -1,5 +1,6 @@
 class Group < ApplicationRecord
   attr_accessor :password
+  attr_readonly :groupname
   before_save :encrypt_password
 
   validates_confirmation_of :password

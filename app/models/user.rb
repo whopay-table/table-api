@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   belongs_to :group
   attr_accessor :password
+  attr_readonly :username
   before_save :encrypt_password
   before_save :default_values
 

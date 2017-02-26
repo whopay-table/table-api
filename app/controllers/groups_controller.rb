@@ -37,7 +37,7 @@ class GroupsController < ApplicationController
 
   # PATCH/PUT /groups/1
   def update
-    if @current_user.group_id == group_params[:id] && @current_user.is_admin
+    if @current_user.group_id == @group.id && @current_user.is_admin
       if @group.update(group_params)
         render json: @group
       else
