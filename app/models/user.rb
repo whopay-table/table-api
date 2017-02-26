@@ -7,10 +7,9 @@ class User < ApplicationRecord
   validates_confirmation_of :password
   validates_presence_of :password, :on => :create
   validates_presence_of :email
-  validates :email, uniqueness: { :scope => :group_id }
-  validates_uniqueness_of :email
+  validates_uniqueness_of :email, :scope => :group_id
   validates_presence_of :username
-  validates :username, uniqueness: { :scope => :group_id }
+  validates_uniqueness_of :username, :scope => :group_id
   validates_presence_of :name
 
   def self.authenticate(email, password)
