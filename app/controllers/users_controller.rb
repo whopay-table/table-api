@@ -3,6 +3,7 @@ class UsersController < ApplicationController
   before_action :set_group, only: [:create]
   before_action :auth_current_user, only: [:update, :destroy]
   before_action :auth_group_signup, only: [:create]
+  before_action :auth_group_member, only: [:show]
   skip_before_action :auth, :only => [:create]
 
   # GET /users/1
@@ -32,7 +33,9 @@ class UsersController < ApplicationController
 
   # DELETE /users/1
   def destroy
-    @user.destroy
+    # TODO: Prevent disable user when balance != 0 or has transaction.accepted == false.
+    @user.is_disabled = true
+    @user.save!
   end
 
   private
@@ -44,6 +47,12 @@ class UsersController < ApplicationController
 
     def auth_group_signup
       unless @group.signup_key == group_signup_key
+        render_forbidden
+      end
+    end
+
+    def auth_group_member
+      unless @current_user.group_id == @user.group_id
         render_forbidden
       end
     end

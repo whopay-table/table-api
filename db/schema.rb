@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170307155012) do
+ActiveRecord::Schema.define(version: 20170307180141) do
 
   create_table "groups", force: :cascade do |t|
     t.string   "groupname"
@@ -34,6 +34,7 @@ ActiveRecord::Schema.define(version: 20170307155012) do
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
     t.string   "api_key"
+    t.boolean  "is_disabled"
     t.index ["api_key"], name: "index_users_on_api_key"
     t.index ["group_id"], name: "index_users_on_group_id"
   end

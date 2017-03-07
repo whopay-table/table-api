@@ -32,6 +32,7 @@ class User < ApplicationRecord
   def default_values
     self.balance = 0
     self.api_key = generate_api_key
+    self.is_disabled = false
 
     unless is_admin.present?
       self.is_admin = false
