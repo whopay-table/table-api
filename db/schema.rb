@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170307180141) do
+ActiveRecord::Schema.define(version: 20170307184200) do
 
   create_table "groups", force: :cascade do |t|
     t.string   "groupname"
@@ -19,6 +19,18 @@ ActiveRecord::Schema.define(version: 20170307180141) do
     t.datetime "updated_at", null: false
     t.string   "signup_key"
     t.index ["signup_key"], name: "index_groups_on_signup_key"
+  end
+
+  create_table "transactions", force: :cascade do |t|
+    t.integer  "from_user_id"
+    t.integer  "to_user_id"
+    t.integer  "amount"
+    t.string   "description"
+    t.boolean  "is_accepted"
+    t.boolean  "is_rejected"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.integer  "group_id"
   end
 
   create_table "users", force: :cascade do |t|

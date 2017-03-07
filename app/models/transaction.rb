@@ -1,4 +1,5 @@
 class Transaction < ApplicationRecord
+  belongs_to :group
   belongs_to :from_user, :class_name => 'User'
 	belongs_to :to_user, :class_name => 'User'
   after_create :reflect_to_accounts

@@ -1,5 +1,6 @@
 class Group < ApplicationRecord
   has_many :users, :dependent => :destroy
+  has_many :transactions, :dependent => :destroy
   attr_readonly :groupname
   before_create :default_values
 
