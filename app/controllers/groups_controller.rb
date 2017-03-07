@@ -77,15 +77,13 @@ class GroupsController < ApplicationController
 
   private
     def auth_admin
-      @is_admin = @current_user.group_id == @group.id && @current_user.is_admin
-      unless @is_admin
+      unless @current_user.group_id == @group.id && @current_user.is_admin
         render_forbidden
       end
     end
 
     def auth_member
-      @is_member = @current_user.group_id == @group.id
-      unless @is_member
+      unless @current_user.group_id == @group.id
         render_forbidden
       end
     end
