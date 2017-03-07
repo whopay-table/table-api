@@ -6,17 +6,26 @@ class Group < ApplicationRecord
   validates_presence_of :groupname
   validates_uniqueness_of :groupname
 
+  def to_json(options={})
+    options[:except] ||= [:signup_key]
+    super(options)
+  end
+
   def default_values
     self.signup_key = generate_signup_key
   end
 
+  def reset_signup_key
+    self.signup_key = generate_signup_key
+  end
+
   def set_admin(user)
-    curr_admin_user = self.users.where(is_admin: true).first
-    unless curr_admin_user.id == user.id
-      curr_admin_user.is_admin = false
+    current_admin_user = self.users.where(is_admin: true).first
+    unless current_admin_user.id == user.id
+      current_admin_user.is_admin = false
       user.is_admin = true
       Group.transaction do
-        curr_admin_user.save!
+        current_admin_user.save!
         user.save!
       end
     end
