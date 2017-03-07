@@ -1,28 +1,13 @@
 class Group < ApplicationRecord
   has_many :users
-  attr_accessor :password
   attr_readonly :groupname
-  before_save :encrypt_password
+  before_create :default_values
 
-  validates_confirmation_of :password
-  validates_presence_of :password, :on => :create
   validates_presence_of :groupname
   validates_uniqueness_of :groupname
 
-  def self.authenticate(groupname, password)
-    group = find_by_groupname(groupname)
-    if group && group.password_hash == BCrypt::Engine.hash_secret(password, group.salt)
-      user
-    else
-      nil
-    end
-  end
-
-  def encrypt_password
-    if password.present?
-      self.salt = BCrypt::Engine.generate_salt
-      self.password_hash = BCrypt::Engine.hash_secret(password, salt)
-    end
+  def default_values
+    self.signup_key = generate_signup_key
   end
 
   def set_admin(user)
@@ -34,6 +19,14 @@ class Group < ApplicationRecord
         curr_admin_user.save!
         user.save!
       end
+    end
+  end
+
+  # Generate a unique sign up key
+  def generate_signup_key
+    loop do
+      token = SecureRandom.base64.tr('+/=', 'Qrt')
+      break token unless Group.exists?(signup_key: token)
     end
   end
 end
