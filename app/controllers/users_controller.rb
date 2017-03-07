@@ -6,12 +6,12 @@ class UsersController < ApplicationController
   before_action :auth_group_member, only: [:show]
   skip_before_action :auth, :only => [:create]
 
-  # GET /users/1
+  # GET /groups/1/users/1
   def show
     render json: @user
   end
 
-  # POST /users
+  # POST /groups/1/users
   def create
     @user = User.new({ group_id: @group.id }.merge(user_params))
 
@@ -22,7 +22,7 @@ class UsersController < ApplicationController
     end
   end
 
-  # PATCH/PUT /users/1
+  # PATCH/PUT /groups/1/users/1
   def update
     if @user.update(user_params)
       render json: @user
@@ -31,7 +31,7 @@ class UsersController < ApplicationController
     end
   end
 
-  # DELETE /users/1
+  # DELETE /groups/1/users/1
   def destroy
     # TODO: Prevent disable user when balance != 0 or has transaction.accepted == false.
     @user.is_disabled = true

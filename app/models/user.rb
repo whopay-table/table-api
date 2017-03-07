@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   belongs_to :group
+  has_many :transaction
   attr_accessor :password
   attr_readonly :username
   before_create :default_values
