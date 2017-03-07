@@ -1,7 +1,7 @@
 class GroupsController < ApplicationController
-  before_action :set_group, only: [:show, :update, :set_admin, :show_signup_key, :reset_signup_key]
+  before_action :set_group, only: [:show, :update, :set_admin, :show_signup_key, :reset_signup_key, :destroy]
   before_action :set_user, only: [:set_admin]
-  before_action :auth_admin, only: [:update, :show_signup_key, :reset_signup_key]
+  before_action :auth_admin, only: [:update, :show_signup_key, :reset_signup_key, :destroy]
   skip_before_action :auth, :only => [:create]
 
   # GET /groups
@@ -69,9 +69,10 @@ class GroupsController < ApplicationController
   end
 
   # DELETE /groups/1
-  # def destroy
-  #   @group.destroy
-  # end
+  def destroy
+    # TODO: Do not destroy when there is user with balance != 0 or trasaction with accepted == false.
+    @group.destroy
+  end
 
   private
     def auth_admin
