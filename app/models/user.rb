@@ -13,11 +13,6 @@ class User < ApplicationRecord
   validates_uniqueness_of :username, scope: :group_id
   validates_presence_of :name
 
-  def to_json(options={})
-    options[:except] ||= [:api_key]
-    super(options)
-  end
-
   def self.authenticate(email, password)
     user = find_by_email(email)
     if user && user.password_hash == BCrypt::Engine.hash_secret(password, user.salt)

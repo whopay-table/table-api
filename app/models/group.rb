@@ -1,5 +1,5 @@
 class Group < ApplicationRecord
-  has_many :users
+  has_many :users, :dependent => :destroy
   attr_readonly :groupname
   before_create :default_values
 
@@ -8,6 +8,7 @@ class Group < ApplicationRecord
 
   def to_json(options={})
     options[:except] ||= [:signup_key]
+    options[:include] ||= [:signup_key]
     super(options)
   end
 

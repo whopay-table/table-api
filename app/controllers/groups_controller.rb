@@ -2,18 +2,19 @@ class GroupsController < ApplicationController
   before_action :set_group, only: [:show, :update, :set_admin, :show_signup_key, :reset_signup_key, :destroy]
   before_action :set_user, only: [:set_admin]
   before_action :auth_admin, only: [:update, :show_signup_key, :reset_signup_key, :destroy]
+  before_action :auth_member, only: [:show]
   skip_before_action :auth, :only => [:create]
 
   # GET /groups
-  def index
-    @groups = Group.all
-
-    render json: @groups
-  end
+  # def index
+  #   @groups = Group.all
+  #
+  #   render json: @groups
+  # end
 
   # GET /groups/1
   def show
-    render json: @group
+    render json: @group, include_users: true
   end
 
   # POST /groups
@@ -78,6 +79,13 @@ class GroupsController < ApplicationController
     def auth_admin
       @is_admin = @current_user.group_id == @group.id && @current_user.is_admin
       unless @is_admin
+        render_forbidden
+      end
+    end
+
+    def auth_member
+      @is_member = @current_user.group_id == @group.id
+      unless @is_member
         render_forbidden
       end
     end
