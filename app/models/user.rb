@@ -3,7 +3,7 @@ class User < ApplicationRecord
   attr_accessor :password
   attr_readonly :username
   before_save :encrypt_password
-  before_save :default_values
+  after_create :default_values
 
   validates_confirmation_of :password
   validates_presence_of :password, on: :create

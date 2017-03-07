@@ -1,5 +1,5 @@
 class GroupsController < ApplicationController
-  before_action :set_group, only: [:show, :update, :destroy]
+  before_action :set_group, only: [:show, :update, :set_admin, :destroy]
   skip_before_action :auth, :only => [:create]
 
   # GET /groups
@@ -48,6 +48,21 @@ class GroupsController < ApplicationController
     end
   end
 
+  # POST /groups/1/set_admin
+  def set_admin
+    if @current_user.group_id == @group.id && @current_user.is_admin
+      set_user
+      if @user
+        @group.set_admin(@user)
+        render json: @user
+      else
+        render_invalid_params keys: ['user_id']
+      end
+    else
+      render_forbidden
+    end
+  end
+
   # DELETE /groups/1
   def destroy
     @group.destroy
@@ -67,5 +82,9 @@ class GroupsController < ApplicationController
     def user_params
       params.require(:user).permit(
         :email, :username, :name, :account_info, :password, :password_confirmation)
+    end
+
+    def set_user
+      @user = User.find(params[:user_id])
     end
 end

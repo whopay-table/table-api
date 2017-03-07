@@ -17,16 +17,28 @@ class ApplicationController < ActionController::API
     end
   end
 
-  def render_unauthorized(realm = "Application")
-    self.headers["WWW-Authenticate"] = %(Token realm="#{realm.gsub(/"/, "")}")
+  def render_unauthorized(realm = 'Application')
+    self.headers['WWW-Authenticate'] = %(Token realm="#{realm.gsub(/"/, '')}")
     render json: {
-      :errors => [ { :code => "auth_fail", :message => "Authentication fail" } ]
+      errors: [ { code: 'auth_fail', message: 'Authentication fail' } ]
     }, status: :unauthorized
   end
 
   def render_forbidden
     render json: {
-      :errors => [ { :code => "forbidden", :message => "No access permission" } ]
+      errors: [ { code: 'forbidden', message: 'No access permission' } ]
     }, status: :forbidden
+  end
+
+  def render_invalid_params(keys)
+    errors = []
+    keys.each do |key|
+      errors.push({
+        code: 'invalid_param',
+        key: key,
+        message: %(Parameter "#{key}" is invalid)
+      })
+    end
+    render json: { errors: errors }, status: :unprocessable_entity
   end
 end
