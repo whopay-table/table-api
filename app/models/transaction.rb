@@ -3,6 +3,7 @@ class Transaction < ApplicationRecord
   belongs_to :from_user, :class_name => 'User'
 	belongs_to :to_user, :class_name => 'User'
   belongs_to :created_user, :class_name => 'User'
+  before_create :default_values
   after_create :reflect_to_accounts
 
   def reject!
@@ -15,6 +16,11 @@ class Transaction < ApplicationRecord
   end
 
 	private
+    def default_values
+      self.is_accepted = self.creted_user_id == self.from_user_id
+      self.is_rejected = false
+    end
+
 		def reflect_to_accounts
       Transaction.transaction do
   			self.from_user.decrement!(:balance, self.amount)
