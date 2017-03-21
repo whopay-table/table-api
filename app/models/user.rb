@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   belongs_to :group
   has_many :transactions
+  has_many :sessions
   attr_accessor :password
   attr_readonly :username
   before_create :default_values
@@ -14,12 +15,12 @@ class User < ApplicationRecord
   validates_uniqueness_of :username, scope: :group_id
   validates_presence_of :name
 
-  def self.authenticate(email, password)
-    user = find_by_email(email)
+  def self.authenticate(group_id, email, password)
+    user = find_by(group_id: group_id, email: email)
     if user && user.password_hash == BCrypt::Engine.hash_secret(password, user.salt)
-      user
+      return user
     else
-      nil
+      return nil
     end
   end
 

@@ -77,7 +77,7 @@ class GroupsController < ApplicationController
     if @group.users.select{ |user| user.balance != 0 }.any?
       render_model_errors model_errors: { id: 'has users with balance not 0' }
       return
-    elsif @group.transactions.select{ |transaction| not transaction.is_accepted }.any?
+    elsif @group.transactions.select{ |transaction| !transaction.is_accepted }.any?
       render_model_errors model_errors: { id: 'has transaction not accepted' }
       return
     end
