@@ -33,7 +33,10 @@ class UsersController < ApplicationController
 
   # DELETE /groups/1/users/1
   def destroy
-    # TODO: Prevent disable user when balance != 0 or has transaction.accepted == false.
+    if @user.balance != 0 || @user.transactions.select{ |transaction| not transaction.is_accepted }.any?
+      render_invalid_params 'id'
+      return
+    end
     @user.is_disabled = true
     @user.save!
   end

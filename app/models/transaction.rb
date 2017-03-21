@@ -8,6 +8,7 @@ class Transaction < ApplicationRecord
 
   def reject!
     Transaction.transaction do
+      self.is_accepted = true
       self.is_rejected = true
       self.from_user.increment!(:balance, self.amount)
       self.to_user.decrement!(:balance, self.amount)

@@ -5,13 +5,6 @@ class GroupsController < ApplicationController
   before_action :auth_member, only: [:show]
   skip_before_action :auth, :only => [:create]
 
-  # GET /groups
-  # def index
-  #   @groups = Group.all
-  #
-  #   render json: @groups
-  # end
-
   # GET /groups/1
   def show
     render json: @group, include_users: true
@@ -71,7 +64,13 @@ class GroupsController < ApplicationController
 
   # DELETE /groups/1
   def destroy
-    # TODO: Do not destroy when there is user with balance != 0 or trasaction with accepted == false.
+    if @group.users.select{ |user| user.balance != 0 }.any?
+      render_invalid_params 'id'
+      return
+    elsif @group.transactions.select{ |transaction| transaction.is_accepted }.any?
+      render_invalid_params 'id'
+      return
+    end
     @group.destroy
   end
 
