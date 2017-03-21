@@ -5,12 +5,13 @@ class GroupsController < ApplicationController
   before_action :auth_member, only: [:show]
   skip_before_action :auth, :only => [:index, :create]
 
+  # GET /groups?groupname=group1
   def index
     @group = Group.find_by(groupname: params.require(:groupname))
     if @group
-      render json: { group_id: @group.id }
+      render json: { id: @group.id }
     else
-      render_invalid_params ['groupname']
+      render_model_errors model_errors: { groupname: 'is not found' }
     end
   end
 

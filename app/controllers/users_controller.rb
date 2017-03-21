@@ -1,10 +1,43 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :update, :destroy]
-  before_action :set_group, only: [:create]
+  before_action :set_group, only: [:index, :create]
   before_action :auth_current_user, only: [:update, :destroy]
-  before_action :auth_group_signup, only: [:create]
+  before_action :auth_group_signup, only: [:index, :create]
   before_action :auth_group_member, only: [:show]
-  skip_before_action :auth, :only => [:create]
+  skip_before_action :auth, :only => [:index, :create]
+
+  # GET /groups/1/users?username=user1 OR
+  # GET /groups/1/users?email=user1@table.api
+  def index
+    if !params.has_key?(:username) && !params.has_key?(:email)
+      render_model_errors model_errors: {
+        username: 'or email is required' ,
+        email: 'or username is required'
+      }
+      return
+    elsif params.has_key?(:username) && params.has_key?(:email)
+      render_model_errors model_errors: {
+        username: 'should not be there when email is given' ,
+        email: 'should not be there when username is given'
+      }
+      return
+    end
+    if params[:username]
+      @user = User.find_by(username: params[:username])
+      if @user
+        render json: { id: @user.id }
+      else
+        render_model_errors model_errors: { username: 'is not found' }
+      end
+    elsif params[:email]
+      @user = User.find_by(email: params[:email])
+      if @user
+        render json: { id: @user.id }
+      else
+        render_model_errors model_errors: { email: 'is not found' }
+      end
+    end
+  end
 
   # GET /groups/1/users/1
   def show
