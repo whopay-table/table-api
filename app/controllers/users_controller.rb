@@ -34,10 +34,10 @@ class UsersController < ApplicationController
   # DELETE /groups/1/users/1
   def destroy
     if @user.balance != 0
-      render_model_errors { id: 'has balance not 0' }
+      render_model_errors model_errors: { id: 'has balance not 0' }
       return
     elsif @user.transactions.select{ |transaction| not transaction.is_accepted }.any?
-      render_model_errors { id: 'has trancation not accepted' }
+      render_model_errors model_errors: { id: 'has trancation not accepted' }
       return
     end
     @user.is_disabled = true
