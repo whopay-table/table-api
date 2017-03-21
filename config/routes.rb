@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  controller :sessions do
+    post 'groups/:group_id/login', action: :login
+    post 'groups/:group_id/logout', action: :logout
+  end
   controller :groups do
     post 'groups/:id/signup_key/reset', action: :reset_signup_key
     get 'groups/:id/signup_key', action: :show_signup_key
