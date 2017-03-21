@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   controller :transactions do
     post 'groups/:group_id/transactions/:id/accept', action: :accept
     post 'groups/:group_id/transactions/:id/reject', action: :reject
+    get 'groups/:group_id/users/:user_id/transactions', action: :index
   end
   resources :groups do
     resources :users

@@ -6,8 +6,12 @@ class TransactionsController < ApplicationController
 
   # GET /groups/1/transactions
   def index
-    @transactions = Transaction.where(group_id: @group.id).order(is_accepted: :desc, created_at: :desc)
-    # TODO: handle offset / count / user-filter.
+    @transactions = Transaction.where(group_id: @group.id)
+    if params[:user_id]
+      @transactions = @transactions.where('from_user_id = ? OR to_user_id = ?', params[:user_id], params[:user_id])
+    end
+    @transactions = @transactions.order(is_accepted: :desc, created_at: :desc)
+    @transactions = @transactions.offset(params.require(:offset)).limit(params.require(:count))
 
     render json: @transactions
   end
