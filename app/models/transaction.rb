@@ -7,8 +7,8 @@ class Transaction < ApplicationRecord
   after_create :reflect_to_accounts
 
   def reject!
-    self.is_rejected = true
     Transaction.transaction do
+      self.is_rejected = true
       self.from_user.increment!(:balance, self.amount)
       self.to_user.decrement!(:balance, self.amount)
       self.save!
@@ -17,7 +17,7 @@ class Transaction < ApplicationRecord
 
 	private
     def default_values
-      self.is_accepted = self.creted_user_id == self.from_user_id
+      self.is_accepted = self.created_user_id == self.from_user_id
       self.is_rejected = false
     end
 

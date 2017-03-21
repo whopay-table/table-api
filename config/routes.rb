@@ -8,7 +8,6 @@ Rails.application.routes.draw do
     post 'groups/:group_id/transactions/:id/accept', action: :accept
     post 'groups/:group_id/transactions/:id/reject', action: :reject
   end
-  end
   resources :groups do
     resources :users
     resources :transactions

@@ -1,8 +1,8 @@
 class TransactionsController < ApplicationController
   before_action :set_transaction, only: [:show, :accept, :reject]
-  before_action :set_group, only: [:index. :show, :create, :accept, :reject]
+  before_action :set_group, only: [:index, :show, :create, :accept, :reject]
   before_action :auth_from_user, only: [:accept, :reject]
-  before_action :auth_group_member, only: [:index. :show, :create]
+  before_action :auth_group_member, only: [:index, :show, :create]
 
   # GET /groups/1/transactions
   def index
@@ -20,11 +20,12 @@ class TransactionsController < ApplicationController
   # POST /groups/1/transactions
   def create
     @transaction = Transaction.new({
-      group_id: @group.id
+      group_id: @group.id,
+      created_user_id: @current_user.id
     }.merge(transaction_params))
 
     if @transaction.save
-      render json: @transaction, status: :created, location: @transaction
+      render json: @transaction, status: :created, location: [@transaction.group, @transaction]
     else
       render json: @transaction.errors, status: :unprocessable_entity
     end
@@ -34,11 +35,13 @@ class TransactionsController < ApplicationController
   def accept
     @transaction.is_accepted = true
     @transaction.save!
+    render json: @transaction
   end
 
   # POST /groups/1/transactions/1/reject
   def reject
     @transaction.reject!
+    render json: @transaction
   end
 
   private
