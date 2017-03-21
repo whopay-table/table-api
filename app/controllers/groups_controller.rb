@@ -3,7 +3,16 @@ class GroupsController < ApplicationController
   before_action :set_user, only: [:set_admin]
   before_action :auth_admin, only: [:update, :show_signup_key, :reset_signup_key, :destroy]
   before_action :auth_member, only: [:show]
-  skip_before_action :auth, :only => [:create]
+  skip_before_action :auth, :only => [:index, :create]
+
+  def index
+    @group = Group.find_by(groupname: params.require(:groupname))
+    if @group
+      render json: { group_id: @group.id }
+    else
+      render_invalid_params ['groupname']
+    end
+  end
 
   # GET /groups/1
   def show
@@ -24,10 +33,10 @@ class GroupsController < ApplicationController
         render json: @group, status: :created, location: @group
       else
         @group.destroy
-        render json: @user.errors, status: :unprocessable_entity
+        render_model_errors @user.errors
       end
     else
-      render json: @group.errors, status: :unprocessable_entity
+      render_model_errors @group.errors
     end
   end
 
@@ -36,7 +45,7 @@ class GroupsController < ApplicationController
     if @group.update(group_params)
       render json: @group
     else
-      render json: @group.errors, status: :unprocessable_entity
+      render_model_errors @group.errors
     end
   end
 
@@ -65,10 +74,10 @@ class GroupsController < ApplicationController
   # DELETE /groups/1
   def destroy
     if @group.users.select{ |user| user.balance != 0 }.any?
-      render_invalid_params 'id'
+      render_model_errors { id: 'has users with balance not 0' }
       return
-    elsif @group.transactions.select{ |transaction| transaction.is_accepted }.any?
-      render_invalid_params 'id'
+    elsif @group.transactions.select{ |transaction| not transaction.is_accepted }.any?
+      render_model_errors { id: 'has transaction not accepted' }
       return
     end
     @group.destroy

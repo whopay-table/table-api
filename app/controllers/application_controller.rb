@@ -41,4 +41,16 @@ class ApplicationController < ActionController::API
     end
     render json: { errors: errors }, status: :unprocessable_entity
   end
+
+  def render_model_errors(model_errors)
+    errors = []
+    model_errors.each do |key, messages|
+      errors.push({
+        code: 'model_error',
+        key: key,
+        messages: messages
+      })
+    end
+    render json: { errors: errors }, status: :unprocessable_entity
+  end
 end

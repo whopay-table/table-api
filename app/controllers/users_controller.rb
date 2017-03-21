@@ -18,7 +18,7 @@ class UsersController < ApplicationController
     if @user.save
       render json: @user, status: :created, location: [@user.group, @user]
     else
-      render json: @user.errors, status: :unprocessable_entity
+      render_model_errors @user.errors
     end
   end
 
@@ -27,14 +27,17 @@ class UsersController < ApplicationController
     if @user.update(user_params)
       render json: @user
     else
-      render json: @user.errors, status: :unprocessable_entity
+      render_model_errors @user.errors
     end
   end
 
   # DELETE /groups/1/users/1
   def destroy
-    if @user.balance != 0 || @user.transactions.select{ |transaction| not transaction.is_accepted }.any?
-      render_invalid_params 'id'
+    if @user.balance != 0
+      render_model_errors { id: 'has balance not 0' }
+      return
+    elsif @user.transactions.select{ |transaction| not transaction.is_accepted }.any?
+      render_model_errors { id: 'has trancation not accepted' }
       return
     end
     @user.is_disabled = true
