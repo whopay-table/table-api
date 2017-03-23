@@ -1,5 +1,5 @@
 class SessionsController < ApplicationController
-  skip_before_action :auth, :only => [:signin]
+  skip_before_action :auth, :only => [:login]
 
   # POST /groups/1/login
   def login
@@ -15,5 +15,6 @@ class SessionsController < ApplicationController
   # POST /groups/1/logout
   def logout
     @current_session.destroy
+    render json: { session: nil }
   end
 end
