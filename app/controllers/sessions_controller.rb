@@ -17,4 +17,9 @@ class SessionsController < ApplicationController
     @current_session.destroy
     render json: { session: nil }
   end
+
+  # GET /groups/1/users/me
+  def show_current_user
+    render json: @current_user
+  end
 end
