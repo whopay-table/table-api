@@ -33,24 +33,10 @@ class User < ApplicationRecord
 
   def default_values
     self.balance = 0
-    self.api_key = generate_api_key
     self.is_disabled = false
 
     unless is_admin.present?
       self.is_admin = false
-    end
-  end
-
-  # # Assign an API key on create
-  # before_create do |user|
-  #   user.api_key = user.generate_api_key
-  # end
-
-  # Generate a unique API key
-  def generate_api_key
-    loop do
-      token = SecureRandom.base64.tr('+/=', 'Qrt')
-      break token unless User.exists?(api_key: token)
     end
   end
 end
