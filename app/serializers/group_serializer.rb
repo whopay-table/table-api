@@ -7,6 +7,6 @@ class GroupSerializer < ActiveModel::Serializer
   end
 
   def users
-    User.where(group_id: object.id)
+    User.select(:id, :email, :username, :name, :balance).where(group_id: object.id)
   end
 end
