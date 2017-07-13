@@ -29,7 +29,11 @@ class TransactionsController < ApplicationController
         created_user_id: @current_user.id
       }.merge(transaction_params))
       if @transactions[:result]
-        render json: @transactions[:result], status: :created, location: [@transactions[:result].first.group, @transactions[:result].first]
+        if @transactions[:result].empty?
+          render json: []
+        else
+          render json: @transactions[:result], status: :created, location: [@group, @transactions[:result].first]
+        end
       else
         render_model_errors @transactions[:errors]
       end
@@ -40,7 +44,7 @@ class TransactionsController < ApplicationController
       }.merge(transaction_params))
 
       if @transaction.save
-        render json: @transaction, status: :created, location: [@transaction.group, @transaction]
+        render json: @transaction, status: :created, location: [@group, @transaction]
       else
         render_model_errors @transaction.errors
       end
