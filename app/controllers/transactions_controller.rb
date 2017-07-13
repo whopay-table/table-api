@@ -23,15 +23,27 @@ class TransactionsController < ApplicationController
 
   # POST /groups/1/transactions
   def create
-    @transaction = Transaction.new({
-      group_id: @group.id,
-      created_user_id: @current_user.id
-    }.merge(transaction_params))
-
-    if @transaction.save
-      render json: @transaction, status: :created, location: [@transaction.group, @transaction]
+    if transaction_params[:from_user_ids]
+      @transactions = Transaction.new_many({
+        group_id: @group.id,
+        created_user_id: @current_user.id
+      }.merge(transaction_params))
+      if @transactions[:result]
+        render json: @transactions[:result], status: :created, location: [@transactions[:result].first.group, @transactions[:result].first]
+      else
+        render_model_errors @transactions[:errors]
+      end
     else
-      render_model_errors @transaction.errors
+      @transaction = Transaction.new({
+        group_id: @group.id,
+        created_user_id: @current_user.id
+      }.merge(transaction_params))
+
+      if @transaction.save
+        render json: @transaction, status: :created, location: [@transaction.group, @transaction]
+      else
+        render_model_errors @transaction.errors
+      end
     end
   end
 
@@ -72,6 +84,6 @@ class TransactionsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def transaction_params
-      params.require(:transaction).permit(:from_user_id, :to_user_id, :amount, :description)
+      params.require(:transaction).permit(:from_user_id, :from_user_ids, :to_user_id, :amount, :description)
     end
 end

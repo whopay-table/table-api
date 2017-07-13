@@ -1,3 +1,9 @@
+class TransactionException < StandardError
+  def initialize(errors)
+    @errors = errors
+  end
+end
+
 class Transaction < ApplicationRecord
   belongs_to :group
   belongs_to :from_user, :class_name => 'User'
@@ -5,6 +11,36 @@ class Transaction < ApplicationRecord
   belongs_to :created_user, :class_name => 'User'
   before_create :default_values
   after_create :reflect_to_accounts
+
+  def self.new_many(params)
+    errors = nil
+    transactions = []
+
+    begin
+      Transaction.transaction do
+        JSON.parse(params['from_user_ids']).each do |from_user_id|
+          transaction = Transaction.new({
+            group_id: params[:group_id],
+            created_user_id: params[:created_user_id],
+            from_user_id: from_user_id,
+            to_user_id: params['to_user_id'],
+            description: params['description'],
+            amount: params['amount']
+          })
+          if transaction.save
+            transactions.push(transaction)
+          else
+            errors = transaction.errors
+            raise raise Exception.new()
+          end
+        end
+      end
+    rescue Exception => e
+      return {errors: errors}
+    end
+
+    return {result: transactions}
+  end
 
   def reject!
     Transaction.transaction do
