@@ -10,7 +10,7 @@ class TransactionsController < ApplicationController
     if params[:user_id]
       @transactions = @transactions.where('from_user_id = ? OR to_user_id = ?', params[:user_id], params[:user_id])
     end
-    @transactions = @transactions.order(is_accepted: :desc, created_at: :desc)
+    @transactions = @transactions.order(created_at: :desc, is_accepted: :desc)
     @transactions = @transactions.offset(params.require(:offset)).limit(params.require(:count))
 
     render json: @transactions
