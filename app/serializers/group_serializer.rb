@@ -1,5 +1,5 @@
 class GroupSerializer < ActiveModel::Serializer
-  attributes :id, :groupname, :title
+  attributes :id, :groupname, :title, :signup_key
   attribute :users, if: :include_user?
 
   def include_user?
