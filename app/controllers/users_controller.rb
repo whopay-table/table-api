@@ -11,26 +11,26 @@ class UsersController < ApplicationController
   def index
     if !params.has_key?(:username) && !params.has_key?(:email)
       render_model_errors model_errors: {
-        username: 'or email is required' ,
+        username: 'or email is required',
         email: 'or username is required'
       }
       return
     elsif params.has_key?(:username) && params.has_key?(:email)
       render_model_errors model_errors: {
-        username: 'should not be there when email is given' ,
+        username: 'should not be there when email is given',
         email: 'should not be there when username is given'
       }
       return
     end
     if params[:username]
-      @user = User.find_by(username: params[:username])
+      @user = User.find_by(username: params[:username], group_id: @group.id)
       if @user
         render json: { id: @user.id }
       else
         render_model_errors model_errors: { username: 'is not found' }
       end
     elsif params[:email]
-      @user = User.find_by(email: params[:email])
+      @user = User.find_by(email: params[:email], group_id: @group.id)
       if @user
         render json: { id: @user.id }
       else
