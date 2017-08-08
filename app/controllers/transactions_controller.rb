@@ -13,12 +13,12 @@ class TransactionsController < ApplicationController
     @transactions = @transactions.order(created_at: :desc, is_accepted: :desc)
     @transactions = @transactions.offset(params.require(:offset)).limit(params.require(:count))
 
-    render json: @transactions
+    render json: @transactions, include: 'from_user,to_user'
   end
 
   # GET /groups/1/transactions/1
   def show
-    render json: @transaction
+    render json: @transaction, include: 'from_user,to_user'
   end
 
   # POST /groups/1/transactions
@@ -32,7 +32,8 @@ class TransactionsController < ApplicationController
         if @transactions[:result].empty?
           render json: []
         else
-          render json: @transactions[:result], status: :created, location: [@group, @transactions[:result].first]
+          render json: @transactions[:result], include: 'from_user,to_user', status: :created,
+            location: [@group, @transactions[:result].first]
         end
       else
         render_model_errors @transactions[:errors]
@@ -44,7 +45,7 @@ class TransactionsController < ApplicationController
       }.merge(transaction_params))
 
       if @transaction.save
-        render json: @transaction, status: :created, location: [@group, @transaction]
+        render json: @transaction, include: 'from_user,to_user', status: :created, location: [@group, @transaction]
       else
         render_model_errors @transaction.errors
       end
@@ -55,13 +56,13 @@ class TransactionsController < ApplicationController
   def accept
     @transaction.is_accepted = true
     @transaction.save!
-    render json: @transaction
+    render json: @transaction, include: 'from_user,to_user'
   end
 
   # POST /groups/1/transactions/1/reject
   def reject
     @transaction.reject!
-    render json: @transaction
+    render json: @transaction, include: 'from_user,to_user'
   end
 
   private
