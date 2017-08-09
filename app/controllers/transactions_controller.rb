@@ -9,8 +9,11 @@ class TransactionsController < ApplicationController
     @transactions = Transaction.where(group_id: @group.id)
     if params[:user_id]
       @transactions = @transactions.where('from_user_id = ? OR to_user_id = ?', params[:user_id], params[:user_id])
+      @transactions = @transactions.order(created_at: :desc, is_accepted: :desc)
+    else
+      @transactions = @transactions.order(created_at: :desc)
     end
-    @transactions = @transactions.order(created_at: :desc, is_accepted: :desc)
+
     @transactions = @transactions.offset(params.require(:offset)).limit(params.require(:count))
 
     render json: @transactions, include: 'from_user,to_user'
