@@ -26,6 +26,13 @@ class TransactionsController < ApplicationController
 
   # POST /groups/1/transactions
   def create
+    if transaction_params[:amount].to_f <= 0
+      render_model_errors model_errors: {
+        amount: 'should be bigger than 0'
+      }
+      return
+    end
+
     if transaction_params[:from_user_ids]
       @transactions = Transaction.new_many({
         group_id: @group.id,
