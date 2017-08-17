@@ -24,6 +24,13 @@ class User < ApplicationRecord
     end
   end
 
+  def reset_password
+    password = SecureRandom.hex(12)
+    self.update_attribute(:password, password)
+    self.save
+    return password
+  end
+
   def encrypt_password
     if password.present?
       self.salt = BCrypt::Engine.generate_salt

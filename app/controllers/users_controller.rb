@@ -1,10 +1,10 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :update, :destroy]
-  before_action :set_group, only: [:index, :create]
+  before_action :set_user, only: [:show, :update, :destroy, :reset_password]
+  before_action :set_group, only: [:index, :create, :reset_password]
   before_action :auth_current_user, only: [:update, :destroy]
   before_action :auth_group_signup, only: [:index, :create]
   before_action :auth_group_member, only: [:show]
-  skip_before_action :auth, :only => [:index, :create]
+  skip_before_action :auth, :only => [:index, :create, :reset_password]
 
   # GET /groups/1/users?username=user1 OR
   # GET /groups/1/users?email=user1@table.api
@@ -42,6 +42,18 @@ class UsersController < ApplicationController
   # GET /groups/1/users/1
   def show
     render json: @user
+  end
+
+  # POST /groups/1/users/1/reset_password
+  def reset_password
+    if @user.group_id == @group.id
+      password = @user.reset_password
+      UserMailer.reset_password(@group, @user, password)
+      render json: @user
+    else
+      render_model_errors model_errors: { user: 'is not found' }
+    end
+
   end
 
   # POST /groups/1/users
