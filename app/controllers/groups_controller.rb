@@ -113,6 +113,6 @@ class GroupsController < ApplicationController
 
     def user_params
       params.require(:user).permit(
-        :email, :username, :name, :account_info, :password, :password_confirmation)
+        :email, :name, :account_info, :password, :password_confirmation)
     end
 end

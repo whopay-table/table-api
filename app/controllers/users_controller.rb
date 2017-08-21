@@ -6,36 +6,20 @@ class UsersController < ApplicationController
   before_action :auth_group_member, only: [:show]
   skip_before_action :auth, :only => [:index, :create, :reset_password]
 
-  # GET /groups/1/users?username=user1 OR
   # GET /groups/1/users?email=user1@table.api
   def index
-    if !params.has_key?(:username) && !params.has_key?(:email)
+    if !params.has_key?(:email)
       render_model_errors model_errors: {
-        username: 'or email is required',
-        email: 'or username is required'
-      }
-      return
-    elsif params.has_key?(:username) && params.has_key?(:email)
-      render_model_errors model_errors: {
-        username: 'should not be there when email is given',
-        email: 'should not be there when username is given'
+        email: 'is required'
       }
       return
     end
-    if params[:username]
-      @user = User.find_by(username: params[:username], group_id: @group.id)
-      if @user
-        render json: { id: @user.id }
-      else
-        render_model_errors model_errors: { username: 'is not found' }
-      end
-    elsif params[:email]
-      @user = User.find_by(email: params[:email], group_id: @group.id)
-      if @user
-        render json: { id: @user.id }
-      else
-        render_model_errors model_errors: { email: 'is not found' }
-      end
+
+    @user = User.find_by(email: params[:email], group_id: @group.id)
+    if @user
+      render json: { id: @user.id }
+    else
+      render_model_errors model_errors: { email: 'is not found' }
     end
   end
 
@@ -120,7 +104,7 @@ class UsersController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def user_params
       params.require(:user).permit(
-        :email, :username, :name, :account_info, :password, :password_confirmation)
+        :email, :name, :account_info, :password, :password_confirmation)
     end
 
     def group_signup_key

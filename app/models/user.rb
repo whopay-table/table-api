@@ -3,7 +3,6 @@ class User < ApplicationRecord
   has_many :transactions
   has_many :sessions
   attr_accessor :password
-  attr_readonly :username
   before_create :default_values
   before_save :encrypt_password
 
@@ -11,8 +10,6 @@ class User < ApplicationRecord
   validates_presence_of :password, on: :create
   validates_presence_of :email
   validates_uniqueness_of :email, scope: :group_id
-  validates_presence_of :username
-  validates_uniqueness_of :username, scope: :group_id
   validates_presence_of :name
 
   def self.authenticate(group_id, email, password)
