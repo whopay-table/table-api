@@ -11,7 +11,7 @@ class GroupsController < ApplicationController
     if @group
       render json: { id: @group.id }
     else
-      render_model_errors model_errors: { groupname: 'is not found' }
+      render_model_errors({ groupname: 'is not found' })
     end
   end
 
@@ -75,10 +75,10 @@ class GroupsController < ApplicationController
   # DELETE /groups/1
   def destroy
     if @group.users.select{ |user| user.balance != 0 }.any?
-      render_model_errors model_errors: { id: 'has users with balance not 0' }
+      render_model_errors({ id: 'has users with balance not 0' })
       return
     elsif @group.transactions.select{ |transaction| !transaction.is_accepted }.any?
-      render_model_errors model_errors: { id: 'has transaction not accepted' }
+      render_model_errors({ id: 'has transaction not accepted' })
       return
     end
     @group.destroy

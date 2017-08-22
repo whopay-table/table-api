@@ -13,7 +13,7 @@ class User < ApplicationRecord
   validates_presence_of :name
 
   def self.authenticate(group_id, email, password)
-    user = find_by(group_id: group_id, email: email)
+    user = find_by(group_id: group_id, email: email, is_disabled: false)
     if user && user.password_hash == BCrypt::Engine.hash_secret(password, user.salt)
       return user
     else

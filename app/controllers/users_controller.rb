@@ -9,9 +9,7 @@ class UsersController < ApplicationController
   # GET /groups/1/users?email=user1@table.api
   def index
     if !params.has_key?(:email)
-      render_model_errors model_errors: {
-        email: 'is required'
-      }
+      render_model_errors({ email: 'is required' })
       return
     end
 
@@ -19,7 +17,7 @@ class UsersController < ApplicationController
     if @user
       render json: { id: @user.id }
     else
-      render_model_errors model_errors: { email: 'is not found' }
+      render_model_errors({ email: 'is not found' })
     end
   end
 
@@ -35,7 +33,7 @@ class UsersController < ApplicationController
       UserMailer.reset_password(@group, @user, password)
       render json: @user
     else
-      render_model_errors model_errors: { user: 'is not found' }
+      render_model_errors({ user: 'is not found' })
     end
 
   end
@@ -83,14 +81,19 @@ class UsersController < ApplicationController
     end
 
     if @user.balance != 0
-      render_model_errors model_errors: { id: 'has balance not 0' }
+      render_model_errors({ id: 'has balance not 0' })
       return
-    elsif @user.transactions.select{ |transaction| not transaction.is_accepted }.any?
-      render_model_errors model_errors: { id: 'has trancation not accepted' }
+    elsif Transaction.where(from_user_id: @user.id, is_accepted: false).any?
+      render_model_errors({ id: 'has transaction not accepted' })
+      return
+    elsif Transaction.where(to_user_id: @user.id, is_accepted: false).any?
+      render_model_errors({ id: 'has transaction not accepted' })
       return
     end
     @user.is_disabled = true
     @user.save!
+
+    render_succeed
   end
 
   private

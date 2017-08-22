@@ -58,4 +58,8 @@ class ApplicationController < ActionController::API
     end
     render json: { errors: errors }, status: :unprocessable_entity
   end
+
+  def render_succeed
+    render json: { result: 'succeed' }
+  end
 end
