@@ -5,7 +5,6 @@ class UserMailer < ApplicationMailer
     @group = group
     @user = user
     @password = password
-    # mail(to: @user.email, subject: 'Your password has been changed.')
-    mail(to: 'jmbyun91@gmail.com', subject: 'Your password has been changed.')
+    mail(to: @user.email, subject: 'Your password has been reset.')
   end
 end

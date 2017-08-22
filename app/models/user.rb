@@ -21,6 +21,10 @@ class User < ApplicationRecord
     end
   end
 
+  def authenticate(password)
+    return self.password_hash == BCrypt::Engine.hash_secret(password, self.salt)
+  end
+
   def reset_password
     password = SecureRandom.hex(12)
     self.update_attribute(:password, password)

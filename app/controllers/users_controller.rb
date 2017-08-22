@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :update, :destroy, :reset_password]
-  before_action :set_group, only: [:index, :create, :reset_password]
+  before_action :set_group, only: [:index, :create, :update, :destroy, :reset_password]
   before_action :auth_current_user, only: [:update, :destroy]
   before_action :auth_group_signup, only: [:index, :create]
   before_action :auth_group_member, only: [:show]
@@ -53,6 +53,13 @@ class UsersController < ApplicationController
 
   # PATCH/PUT /groups/1/users/1
   def update
+    unless @user.authenticate(params[:password])
+      render json: {
+        errors: [ { code: 'password_fail', message: 'Authentication fail' } ]
+      }, status: :unauthorized
+      return
+    end
+
     if @user.update(user_params)
       render json: @user
     else
@@ -62,6 +69,13 @@ class UsersController < ApplicationController
 
   # DELETE /groups/1/users/1
   def destroy
+    unless @user.authenticate(params[:password])
+      render json: {
+        errors: [ { code: 'password_fail', message: 'Authentication fail' } ]
+      }, status: :unauthorized
+      return
+    end
+
     if @user.balance != 0
       render_model_errors model_errors: { id: 'has balance not 0' }
       return
