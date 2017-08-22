@@ -60,6 +60,12 @@ class UsersController < ApplicationController
       return
     end
 
+    user = User.find_by(email: user_params[:email], group_id: @group.id)
+    if user && (user.id != @user.id)
+      render_invalid_params keys: ['email']
+      return
+    end
+
     if @user.update(user_params)
       render json: @user
     else
