@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :update, :destroy, :reset_password]
+  before_action :set_user, only: [:show, :update, :destroy]
   before_action :set_group, only: [:index, :create, :update, :destroy, :reset_password]
   before_action :auth_current_user, only: [:update, :destroy]
   before_action :auth_group_signup, only: [:index, :create]
@@ -26,9 +26,11 @@ class UsersController < ApplicationController
     render json: @user
   end
 
-  # POST /groups/1/users/1/reset_password
+  # POST /groups/1/users/reset_password?email=user1@table.api
   def reset_password
-    if @user.group_id == @group.id
+    @user = User.find_by(email: params[:email], group_id: @group.id)
+
+    if @user
       password = @user.reset_password
       UserMailer.reset_password(@group, @user, password)
       render json: @user

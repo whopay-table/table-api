@@ -15,7 +15,7 @@ Rails.application.routes.draw do
     get 'groups/:group_id/users/:user_id/transactions', action: :index
   end
   controller :users do
-    post 'groups/:group_id/users/:id/reset_password', action: :reset_password
+    post 'groups/:group_id/users/reset_password', action: :reset_password
   end
   resources :groups do
     resources :users
