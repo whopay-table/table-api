@@ -32,7 +32,7 @@ class UsersController < ApplicationController
 
     if @user
       password = @user.reset_password
-      UserMailer.reset_password(@group, @user, password)
+      UserMailer.reset_password(@group, @user, password).deliver_later
       render json: @user
     else
       render_model_errors({ user: 'is not found' })
