@@ -18,4 +18,4 @@ ENV RACK_ENV production
 COPY . ./
 
 # Precompile Rails assets. We set a dummy secret key
-RUN bundle exec rake SECRET_KEY_BASE=pickasecuretoken  assets:precompile
+# RUN bundle exec rake#  SECRET_KEY_BASE=pickasecuretoken  assets:precompile
