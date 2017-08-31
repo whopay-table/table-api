@@ -1,0 +1,3 @@
+CREATE USER docker;
+CREATE DATABASE app_database;
+GRANT ALL PRIVILEGES ON DATABASE app_database TO docker;

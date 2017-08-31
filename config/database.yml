@@ -11,8 +11,6 @@ default: &default
   database: app_database
   host: db
   user: docker
-  password: docker
-
 
 development:
   adapter: sqlite3
