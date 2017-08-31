@@ -69,6 +69,7 @@ GEM
     nio4r (1.2.1)
     nokogiri (1.7.0.1)
       mini_portile2 (~> 2.1.0)
+    pg (0.13.2)
     puma (3.6.2)
     rack (2.0.1)
     rack-attack (5.0.1)
@@ -149,6 +150,7 @@ DEPENDENCIES
   bcrypt (~> 3.1.7)
   byebug
   listen (~> 3.0.5)
+  pg (~> 0.13.2)
   puma (~> 3.0)
   rack-attack
   rack-cors
@@ -160,4 +162,4 @@ DEPENDENCIES
   tzinfo-data
 
 BUNDLED WITH
-   1.14.3
+   1.15.4
