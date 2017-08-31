@@ -1,7 +1,7 @@
 version: '2'
 services:
   app:
-    image: jmbyun/table-api:0.2
+    image: jmbyun/table-api:0.3
     volumes:
       - ./file_storage:/app/public/system/
       - assets:/app/public/assets/
