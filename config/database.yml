@@ -10,7 +10,8 @@ default: &default
   pool: 5
   database: app_database
   host: db
-  user: postgres
+  user: docker
+  password: docker
 
 
 development:
