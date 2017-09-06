@@ -9,7 +9,7 @@ services:
       - SECRET_KEY_BASE=ff2a04ec2c2379ebd399b7b1140b4037a1d0dae22db508fd73935dce6c38cdd903326a2a8d1ad306b6a9a161759d2e50aef1db69d9c861375d0b5fa4c4f62143
   nginx:
     ports:
-      - 3080:80
+      - 3080:3080
     volumes:
       - ./nginx.production.conf:/etc/nginx/conf.d/default.conf
     networks:
