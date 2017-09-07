@@ -8,8 +8,6 @@ services:
       - ./initdb.sql:/docker-entrypoint-initdb.d/init.sql
   app:
     command: bundle exec puma -C config/puma.rb
-    #ports:
-    #  - 127.0.0.1:3000:3000
     depends_on:
       - db
   nginx:
@@ -25,8 +23,8 @@ services:
     volumes:
       - ./backup:/backup
     environment:
-  #    - PGUSER=postgres
-  #    - PGPASSWORD=
-  #    - PGPORT=5432
-  #    - PGHOST=db
+      - PGUSER=docker
+      - PGPASSWORD=
+      - PGPORT=5432
+      - PGHOST=db
       - PGDATABASE=app_database
