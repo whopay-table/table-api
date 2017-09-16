@@ -19,3 +19,10 @@
 
 # Ignore Byebug command history file.
 .byebug_history
+
+# Ignore database backup.
+/backup
+/.backup
+
+# Ignore environment dependent configs.
+/configs.env

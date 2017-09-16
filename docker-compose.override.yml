@@ -5,6 +5,8 @@ services:
     volumes:
       - .:/app
       - ./public/system/:/app/public/system/
+    env_file:
+      - configs.env
     ports:
       - 3000:3000
   nginx:

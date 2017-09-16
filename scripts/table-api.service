@@ -1,0 +1,13 @@
+[Unit]
+Description=Table API containers
+After=docker.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+Restart=always
+ExecStart=/usr/bin/docker-compose -f {{PWD}}/docker-compose.yml -f {{PWD}}/docker-compose.production.yml up
+ExecStop=/usr/bin/docker-compose -f {{PWD}}/docker-compose.yml -f {{PWD}}/docker-compose.production.yml stop
+
+[Install]
+WantedBy=multi-user.target
