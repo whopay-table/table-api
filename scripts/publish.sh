@@ -26,7 +26,7 @@ then
     exit 1
 fi
 
-if [[ $VERSION =~ v[0-9\.]+ ]]
+if [ $VERSION =~ v[0-9\.]+ ]
 then
     echo "Tagging $VERSION on repository."
 else
@@ -40,7 +40,7 @@ git push origin $VERSION
 
 echo "Building docker image for $VERSION."
 
-if [ $2 = "--use-cache" ]
+if [ $2 = --use-cache ]
 then
     echo "Using cache for docker image building."
     docker build -f Dockerfile.prod -t "table-api:$PLAIN_VERSION" .
@@ -49,5 +49,7 @@ else
     docker build --no-cache -f Dockerfile.prod -t "table-api:$PLAIN_VERSION" .
 fi
 
-docker tag "table-api:$PLAIN_VERSION" "jmbyun/table-api:$PLAIN_VERSION"
-docker push "jmbyun/table-api:$PLAIN_VERSION"
+echo "Pushing docker image for $VERSION."
+
+docker tag table-api:$PLAIN_VERSION jmbyun/table-api:$PLAIN_VERSION
+docker push jmbyun/table-api:$PLAIN_VERSION
