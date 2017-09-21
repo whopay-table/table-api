@@ -40,7 +40,7 @@ git push origin $VERSION
 
 echo "Building docker image for $VERSION."
 
-if [ $2 = --use-cache ]
+if [ "$2" = "--use-cache" ]
 then
     echo "Using cache for docker image building."
     docker build -f Dockerfile.prod -t "table-api:$PLAIN_VERSION" .
