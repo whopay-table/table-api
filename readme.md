@@ -94,6 +94,8 @@ To run an interactive console for PostgreSQL database, run a following command.
 table-web$ ./run psql
 ```
 
+This requires `psql` installed on your environment.
+
 ### Backup database
 
 
@@ -102,3 +104,5 @@ To backup production database, run a following command.
 ```
 table-web$ ./run backup-database > ./backup/170921.sql
 ```
+
+This requires `pg_dump` installed on your environment.
