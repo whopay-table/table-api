@@ -26,3 +26,9 @@
 
 # Ignore environment dependent configs.
 /configs.env
+
+# Ignore auto-generated docker-compose file for production.
+/docker-compose.production.yml
+
+# Ignore environment-dependent SSL certificates for production.
+/cert
