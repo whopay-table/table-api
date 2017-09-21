@@ -42,9 +42,19 @@ run the command below.
 table-api$ docker-compose run app rake db:migrate
 ```
 
-### Publish docker image for production
+### Publish for production
 
+If you want to publish the current status of the project for production release, run the command below with the `[version]` in a form of `v[0-9\.]+`.
 
+```
+table-api$ ./run publish [version]
+```
+
+To publish the project, your current branch must be `master` and
+every local changes in your project should have been
+committed and synced with the remote repository.
+
+This command will result in tagging a version on a remote repository and building and pushing a docker image for this version.
 
 ## Deployment
 
@@ -53,7 +63,7 @@ table-api$ docker-compose run app rake db:migrate
 To run production server as a service, run following command to install `table-api.service`.
 
 ```
-table-api$ sh ./scripts/install-service.sh
+table-api$ ./run install-service
 ```
 
 And then, set to use production config file.
@@ -62,23 +72,33 @@ And then, set to use production config file.
 table-web$ cp configs.production.env configs.env
 ```
 
+You also need to provide required SSL certificates in `table-api/cert` directory.
+
 ### Release a specific version
 
-To release a specific version of the client based on Git tag, follow the steps below.
-
-#### Build for release
-
-Pull the version `{version}` from the Git server and build the client with the following command.
+To release a specific version of the client based on Git tag, run following command.
 
 ```
-table-web$ docker-compose run web yarn run release {version}
+table-api$ ./run release [version]
 ```
 
-#### Deploy the client
+This command will reset your code to the commit,
+checkout requested version from remote repository,
+pull docker image, migrate the database, and re-run the production server.
 
-After successfully build the desired version of the source code to a client,
-run following command to put the built app in `table-web/deploy`, and then restart the server to apply.
+### Run database interactive console
+
+To run an interactive console for PostgreSQL database, run a following command.
 
 ```
-table-web$ sh ./scripts/deploy.sh
+table-web$ ./run psql
+```
+
+### Backup database
+
+
+To backup production database, run a following command.
+
+```
+table-web$ ./run backup-database > ./backup/170921.sql
 ```
