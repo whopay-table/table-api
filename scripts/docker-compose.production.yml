@@ -6,7 +6,7 @@ services:
       - ./file_storage:/app/public/system/
       - assets:/app/public/assets/
     env_file:
-      - configs.env
+      - configs.production.env
   nginx:
     ports:
       - 3080:3080
