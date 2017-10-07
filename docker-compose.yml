@@ -5,7 +5,7 @@ services:
     ports:
       - "127.0.0.1:5432:5432"
     volumes:
-      - ./initdb.sql:/docker-entrypoint-initdb.d/init.sql
+      - ${PWD}/initdb.sql:/docker-entrypoint-initdb.d/init.sql
   app:
     command: bundle exec puma -C config/puma.rb
     depends_on:
