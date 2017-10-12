@@ -72,7 +72,8 @@ And then, set to use production config file.
 table-web$ cp configs.production.env configs.env
 ```
 
-You also need to provide required SSL certificates in `table-api/cert` directory.
+You also need to provide required SSL certificates in `table-api/cert` directory and
+provide `table-api/data` directory to store files for database data in.
 
 ### Release a specific version
 
