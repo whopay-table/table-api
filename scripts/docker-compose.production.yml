@@ -1,5 +1,8 @@
 version: '2'
 services:
+  db:
+    volumes:
+      - ./data:/var/lib/postgresql/data
   app:
     image: jmbyun/table-api:{{VERSION}}
     volumes:

@@ -32,3 +32,6 @@
 
 # Ignore environment-dependent SSL certificates for production.
 /cert
+
+# Ignore database volume for production.
+/data
