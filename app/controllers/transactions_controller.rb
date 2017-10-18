@@ -1,7 +1,8 @@
 class TransactionsController < ApplicationController
   before_action :set_transaction, only: [:show, :accept, :reject]
   before_action :set_group, only: [:index, :show, :create, :accept, :reject]
-  before_action :auth_transaction_user, only: [:accept, :reject]
+  before_action :auth_transaction_user, only: [:reject]
+  before_action :auth_transaction_from_user, only: [:accept]
   before_action :auth_pending_transaction, only: [:accept, :reject]
   before_action :auth_group_member, only: [:index, :show, :create]
 
@@ -75,6 +76,12 @@ class TransactionsController < ApplicationController
   end
 
   private
+    def auth_transaction_from_user
+      unless @current_user.id == @transaction.from_user_id
+        render_forbidden
+      end
+    end
+
     def auth_transaction_user
       unless @current_user.id == @transaction.from_user_id || current_user.id == @transaction.to_user_id
         render_forbidden
