@@ -83,7 +83,7 @@ class TransactionsController < ApplicationController
     end
 
     def auth_transaction_user
-      unless @current_user.id == @transaction.from_user_id || current_user.id == @transaction.to_user_id
+      unless @current_user.id == @transaction.from_user_id || @current_user.id == @transaction.to_user_id
         render_forbidden
       end
     end
