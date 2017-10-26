@@ -48,5 +48,5 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-# Use whenever to set cronjob up
-gem 'whenever', :require => false
+# Use crono for scheduled tasks
+gem 'crono'

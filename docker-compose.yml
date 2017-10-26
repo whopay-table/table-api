@@ -7,7 +7,7 @@ services:
     volumes:
       - ${PWD}/initdb.sql:/docker-entrypoint-initdb.d/init.sql
   app:
-    command: bundle exec puma -C config/puma.rb
+    command: bash -c "bundle exec crono & bundle exec puma -C config/puma.rb"
     depends_on:
       - db
   nginx:

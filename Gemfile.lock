@@ -46,8 +46,10 @@ GEM
     bcrypt (3.1.11)
     builder (3.2.3)
     byebug (9.0.6)
-    chronic (0.10.2)
     concurrent-ruby (1.0.4)
+    crono (1.1.2)
+      activerecord (>= 4.0)
+      activesupport (>= 4.0)
     diff-lcs (1.3)
     erubis (2.7.0)
     ffi (1.9.17)
@@ -142,8 +144,6 @@ GEM
     websocket-driver (0.6.4)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
-    whenever (0.9.7)
-      chronic (>= 0.6.3)
 
 PLATFORMS
   ruby
@@ -152,6 +152,7 @@ DEPENDENCIES
   active_model_serializers (~> 0.10.0)
   bcrypt (~> 3.1.7)
   byebug
+  crono
   listen (~> 3.0.5)
   pg (~> 0.18.4)
   puma (~> 3.0)
@@ -163,7 +164,6 @@ DEPENDENCIES
   spring-watcher-listen (~> 2.0.0)
   sqlite3
   tzinfo-data
-  whenever
 
 BUNDLED WITH
    1.15.4
