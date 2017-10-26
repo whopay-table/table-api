@@ -48,7 +48,6 @@ class Transaction < ApplicationRecord
       false,
       DateTime.now
     ).update_all(is_accepted: true)
-    puts 'auto accepted'
   end
 
   def reject!
@@ -67,7 +66,6 @@ class Transaction < ApplicationRecord
       self.is_rejected = false
       unless self.is_accepted
         self.auto_accept_at = DateTime.now + 3.days
-        # self.auto_accept_at = DateTime.now + 1.minute
       end
     end
 
