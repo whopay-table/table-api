@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170821232758) do
+ActiveRecord::Schema.define(version: 20171026021304) do
+
+  create_table "crono_jobs", force: :cascade do |t|
+    t.string   "job_id",                               null: false
+    t.text     "log",               limit: 1073741823
+    t.datetime "last_performed_at"
+    t.boolean  "healthy"
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.index ["job_id"], name: "index_crono_jobs_on_job_id", unique: true
+  end
 
   create_table "groups", force: :cascade do |t|
     t.string   "groupname"
@@ -42,6 +52,7 @@ ActiveRecord::Schema.define(version: 20170821232758) do
     t.datetime "updated_at",      null: false
     t.integer  "group_id"
     t.integer  "created_user_id"
+    t.datetime "auto_accept_at"
   end
 
   create_table "users", force: :cascade do |t|

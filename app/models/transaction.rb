@@ -42,6 +42,14 @@ class Transaction < ApplicationRecord
     return {result: transactions}
   end
 
+  def self.auto_accept
+    Transaction.where(
+      'is_accepted = ? AND auto_accept_at IS NOT NULL AND auto_accept_at < ?',
+      false,
+      DateTime.now
+    ).update_all(is_accepted: true)
+  end
+
   def reject!
     Transaction.transaction do
       self.is_accepted = true
@@ -56,6 +64,9 @@ class Transaction < ApplicationRecord
     def default_values
       self.is_accepted = self.created_user_id == self.from_user_id
       self.is_rejected = false
+      unless self.is_accepted
+        self.auto_accept_at = DateTime.now + 3.days
+      end
     end
 
 		def reflect_to_accounts
